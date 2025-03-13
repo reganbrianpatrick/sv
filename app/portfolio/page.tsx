@@ -1,0 +1,266 @@
+import Link from "next/link"
+import Image from "next/image"
+import { ArrowUpRight } from "lucide-react"
+
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
+
+export default function PortfolioPage() {
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">
+        <section className="w-full py-12 md:py-24 lg:py-32">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">Our Portfolio</h1>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  We're proud to partner with these innovative companies that are reshaping industries through service
+                  innovation.
+                </p>
+              </div>
+            </div>
+            <Tabs defaultValue="all" className="mt-8">
+              <div className="flex justify-center">
+                <TabsList>
+                  <TabsTrigger value="all">All</TabsTrigger>
+                  <TabsTrigger value="saas">SaaS</TabsTrigger>
+                  <TabsTrigger value="fintech">Fintech</TabsTrigger>
+                  <TabsTrigger value="health">Healthcare</TabsTrigger>
+                </TabsList>
+              </div>
+              <TabsContent value="all" className="mt-6">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {portfolioCompanies.map((company, index) => (
+                    <PortfolioCard key={index} company={company} />
+                  ))}
+                </div>
+              </TabsContent>
+              <TabsContent value="saas" className="mt-6">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {portfolioCompanies
+                    .filter((company) => company.category === "SaaS")
+                    .map((company, index) => (
+                      <PortfolioCard key={index} company={company} />
+                    ))}
+                </div>
+              </TabsContent>
+              <TabsContent value="fintech" className="mt-6">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {portfolioCompanies
+                    .filter((company) => company.category === "Fintech")
+                    .map((company, index) => (
+                      <PortfolioCard key={index} company={company} />
+                    ))}
+                </div>
+              </TabsContent>
+              <TabsContent value="health" className="mt-6">
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {portfolioCompanies
+                    .filter((company) => company.category === "Healthcare")
+                    .map((company, index) => (
+                      <PortfolioCard key={index} company={company} />
+                    ))}
+                </div>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </section>
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+          <div className="container px-4 md:px-6">
+            <div className="flex flex-col items-center justify-center space-y-4 text-center">
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Investment Criteria</h2>
+                <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                  We look for specific qualities in the companies we invest in.
+                </p>
+              </div>
+            </div>
+            <div className="mx-auto grid max-w-5xl gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
+              <Card>
+                <CardHeader>
+                  <CardTitle>Market Opportunity</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    We invest in companies addressing large, growing markets with a clear path to significant scale.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Team Excellence</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    We back exceptional founders with deep domain expertise and the vision to transform their
+                    industries.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Technology Advantage</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    We seek companies with proprietary technology or approaches that create sustainable competitive
+                    advantages.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Service Innovation</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    We focus on businesses that are reimagining service delivery through technology and new business
+                    models.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Scalable Economics</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    We invest in companies with attractive unit economics and clear paths to profitability as they
+                    scale.
+                  </p>
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Impact Potential</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground">
+                    We value companies that can create meaningful positive impact alongside financial returns.
+                  </p>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </section>
+      </main>
+      <Footer />
+    </div>
+  )
+}
+
+// Portfolio company type
+type PortfolioCompany = {
+  name: string
+  logo: string
+  description: string
+  category: "SaaS" | "Fintech" | "Healthcare"
+  website: string
+}
+
+// Sample portfolio companies
+const portfolioCompanies: PortfolioCompany[] = [
+  {
+    name: "CloudService",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Enterprise SaaS platform for service management and optimization.",
+    category: "SaaS",
+    website: "https://cloudservice.example.com",
+  },
+  {
+    name: "FinanceFlow",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Next-generation payment processing for service businesses.",
+    category: "Fintech",
+    website: "https://financeflow.example.com",
+  },
+  {
+    name: "HealthConnect",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Telehealth platform connecting patients with healthcare providers.",
+    category: "Healthcare",
+    website: "https://healthconnect.example.com",
+  },
+  {
+    name: "ServiceAI",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "AI-powered customer service automation platform.",
+    category: "SaaS",
+    website: "https://serviceai.example.com",
+  },
+  {
+    name: "WealthTech",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Digital wealth management for service professionals.",
+    category: "Fintech",
+    website: "https://wealthtech.example.com",
+  },
+  {
+    name: "MedSchedule",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Healthcare scheduling and patient management platform.",
+    category: "Healthcare",
+    website: "https://medschedule.example.com",
+  },
+  {
+    name: "DataService",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Data analytics platform for service optimization.",
+    category: "SaaS",
+    website: "https://dataservice.example.com",
+  },
+  {
+    name: "InsureTech",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Digital insurance platform for service businesses.",
+    category: "Fintech",
+    website: "https://insuretech.example.com",
+  },
+  {
+    name: "CareConnect",
+    logo: "/placeholder.svg?height=80&width=80",
+    description: "Remote patient monitoring and care coordination platform.",
+    category: "Healthcare",
+    website: "https://careconnect.example.com",
+  },
+]
+
+// Portfolio Card Component
+function PortfolioCard({ company }: { company: PortfolioCompany }) {
+  return (
+    <Card className="overflow-hidden">
+      <CardHeader className="pb-2">
+        <div className="flex items-center gap-4">
+          <Image
+            src={company.logo || "/placeholder.svg"}
+            alt={`${company.name} logo`}
+            width={40}
+            height={40}
+            className="rounded-md"
+          />
+          <CardTitle>{company.name}</CardTitle>
+        </div>
+        <CardDescription>{company.category}</CardDescription>
+      </CardHeader>
+      <CardContent>
+        <p className="text-muted-foreground">{company.description}</p>
+      </CardContent>
+      <CardFooter>
+        <Link
+          href={company.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-sm text-primary flex items-center"
+        >
+          Visit Website
+          <ArrowUpRight className="ml-1 h-4 w-4" />
+        </Link>
+      </CardFooter>
+    </Card>
+  )
+}
+
