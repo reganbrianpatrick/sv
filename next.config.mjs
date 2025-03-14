@@ -1,5 +1,5 @@
 const nextConfig = {
-  output: 'standalone',
+  // Configure image domains
   images: {
     domains: ['placeholder.com'],
     remotePatterns: [
@@ -9,18 +9,14 @@ const nextConfig = {
       },
     ],
   },
+  // Disable TypeScript type checking during build for faster builds
   typescript: {
-    // !! WARN !!
-    // Dangerously allow production builds to successfully complete even if
-    // your project has type errors.
-    // !! WARN !!
     ignoreBuildErrors: true,
   },
+  // Disable ESLint during build for faster builds
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
-  },
+  }
 }
 
 export default nextConfig;
