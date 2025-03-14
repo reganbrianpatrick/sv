@@ -1,36 +1,22 @@
 const nextConfig = {
-  // Use static export for GitHub Pages
-  output: "export",
-  // Disable image optimization to avoid issues
+  // Enable React strict mode for better development experience
+  reactStrictMode: true,
+  // Enable SWC minification for faster builds
+  swcMinify: true,
+  // Configure image domains
   images: {
-    unoptimized: true,
+    domains: ["placeholder.com"],
+    // No need for unoptimized: true on Vercel
   },
-  // Disable TypeScript type checking during build
+  // Disable TypeScript type checking during build for faster builds
+  // You can remove this if you want type checking during build
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Disable ESLint during build
+  // Disable ESLint during build for faster builds
+  // You can remove this if you want ESLint during build
   eslint: {
     ignoreDuringBuilds: true,
-  },
-  // Use trailing slash for consistency
-  trailingSlash: true,
-  // Disable strict mode
-  reactStrictMode: false,
-  // Use SWC minify
-  swcMinify: true,
-  // Explicitly set the build directory
-  distDir: "out",
-  // Remove webpack5 setting as it's not needed and can cause issues
-  // webpack5: false,
-
-  // IMPORTANT: Remove assetPrefix and basePath for now as they can cause issues
-  // assetPrefix: './',
-
-  // Disable experimental features
-  experimental: {
-    // Disable any experimental features
-    appDir: false,
   },
 }
 

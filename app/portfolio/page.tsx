@@ -3,7 +3,6 @@ import Image from "next/image"
 import { ArrowUpRight } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
@@ -23,50 +22,11 @@ export default function PortfolioPage() {
                 </p>
               </div>
             </div>
-            <Tabs defaultValue="all" className="mt-8">
-              <div className="flex justify-center">
-                <TabsList>
-                  <TabsTrigger value="all">All</TabsTrigger>
-                  <TabsTrigger value="saas">SaaS</TabsTrigger>
-                  <TabsTrigger value="fintech">Fintech</TabsTrigger>
-                  <TabsTrigger value="health">Healthcare</TabsTrigger>
-                </TabsList>
-              </div>
-              <TabsContent value="all" className="mt-6">
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {portfolioCompanies.map((company, index) => (
-                    <PortfolioCard key={index} company={company} />
-                  ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="saas" className="mt-6">
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {portfolioCompanies
-                    .filter((company) => company.category === "SaaS")
-                    .map((company, index) => (
-                      <PortfolioCard key={index} company={company} />
-                    ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="fintech" className="mt-6">
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {portfolioCompanies
-                    .filter((company) => company.category === "Fintech")
-                    .map((company, index) => (
-                      <PortfolioCard key={index} company={company} />
-                    ))}
-                </div>
-              </TabsContent>
-              <TabsContent value="health" className="mt-6">
-                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                  {portfolioCompanies
-                    .filter((company) => company.category === "Healthcare")
-                    .map((company, index) => (
-                      <PortfolioCard key={index} company={company} />
-                    ))}
-                </div>
-              </TabsContent>
-            </Tabs>
+            <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {portfolioCompanies.map((company, index) => (
+                <PortfolioCard key={index} company={company} />
+              ))}
+            </div>
           </div>
         </section>
       </main>
