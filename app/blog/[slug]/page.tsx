@@ -1,9 +1,10 @@
-import Link from "next/link"
 import fs from "fs"
 import path from "path"
 import { notFound } from "next/navigation"
 import { getBlogPostBySlug } from "@/lib/blog"
 import Image from "next/image"
+import Link from "next/link"
+import { ArrowLeft, Calendar, Clock } from "lucide-react"
 
 // Import the MDX components
 import { MDXRemote } from "next-mdx-remote/rsc"
@@ -38,31 +39,46 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
   const content = fileContents.replace(/---[\s\S]*?---/, "")
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="container py-12 md:py-16 lg:py-24">
       <article className="mx-auto max-w-3xl">
-        <div className="space-y-6">
-          <Link href="/blog" className="inline-flex items-center text-sm font-medium text-primary hover:underline">
-            ← Back to Blog
-          </Link>
+        <Link
+          href="/blog"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Blog
+        </Link>
 
-          <div className="space-y-2">
+        <div className="space-y-8">
+          <div className="space-y-4">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{post.title}</h1>
-            <div className="flex items-center gap-2 text-gray-500">
-              <time dateTime={post.date}>
-                {new Date(post.date).toLocaleDateString("en-US", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </time>
-              <span>•</span>
-              <span>{post.readingTime}</span>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                <time dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                <span>{post.readingTime}</span>
+              </div>
             </div>
           </div>
 
           {post.coverImage && (
-            <div className="relative aspect-video overflow-hidden rounded-lg">
-              <Image src={post.coverImage || "/placeholder.svg"} alt={post.title} fill className="object-cover" />
+            <div className="overflow-hidden rounded-lg">
+              <Image
+                src={post.coverImage || "/placeholder.svg"}
+                alt={post.title}
+                width={1200}
+                height={675}
+                className="w-full object-cover"
+              />
             </div>
           )}
 
@@ -71,7 +87,8 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
 
           {post.tags && post.tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 pt-6">
+            <div className="flex flex-wrap gap-2 pt-6 border-t border-gray-200 dark:border-gray-800">
+              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Tags:</span>
               {post.tags.map((tag) => (
                 <span
                   key={tag}
