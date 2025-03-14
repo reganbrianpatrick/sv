@@ -1,8 +1,9 @@
-import { notFound } from "next/navigation"
-import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { ArrowLeft, Calendar, User } from "lucide-react"
 import Image from "next/image"
+import { ArrowLeft, Calendar, User } from "lucide-react"
+import { notFound } from "next/navigation"
+
+import { Button } from "@/components/ui/button"
 
 // Define the blog post type
 type BlogPost = {
@@ -122,7 +123,6 @@ export function generateStaticParams() {
 
 type Props = {
   params: { slug: string }
-  searchParams?: { [key: string]: string | string[] | undefined }
 }
 
 export function generateMetadata({ params }: Props) {
@@ -141,7 +141,6 @@ export function generateMetadata({ params }: Props) {
   }
 }
 
-// Fix the page props type to match Next.js expectations
 export default function BlogPostPage({ params }: Props) {
   // Type-safe check if the slug exists in our blog posts
   const post = params.slug in blogPosts ? blogPosts[params.slug] : null

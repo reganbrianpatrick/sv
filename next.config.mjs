@@ -1,14 +1,21 @@
 const nextConfig = {
-  // Configure pageExtensions to include md and mdx
-  pageExtensions: ['js', 'jsx', 'md', 'mdx', 'ts', 'tsx'],
-  eslint: {
-    ignoreDuringBuilds: true,
+  // Configure image domains
+  images: {
+    domains: ['placeholder.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
+  // Disable TypeScript type checking during build for faster builds
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
-    domains: ['placeholder.com'],
+  // Disable ESLint during build for faster builds
+  eslint: {
+    ignoreDuringBuilds: true,
   }
 }
 

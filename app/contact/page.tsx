@@ -1,57 +1,12 @@
 "use client"
 
-import { useEffect, useRef } from "react"
 import { Mail, MapPin, Phone } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
-// Add HubSpot types
-declare global {
-  interface Window {
-    hbspt?: {
-      forms: {
-        create: (config: {
-          region: string
-          portalId: string
-          formId: string
-          target: string
-        }) => void
-      }
-    }
-  }
-}
-
 export default function ContactPage() {
-  const hubspotFormRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    // Load HubSpot script
-    const script = document.createElement("script")
-    script.src = "https://js.hsforms.net/forms/embed/v2.js"
-    script.charset = "utf-8"
-    script.type = "text/javascript"
-    script.defer = true
-    document.body.appendChild(script)
-
-    script.onload = () => {
-      if (window.hbspt && hubspotFormRef.current) {
-        window.hbspt.forms.create({
-          region: "na1",
-          portalId: "YOUR_HUBSPOT_PORTAL_ID", // Replace with your HubSpot portal ID
-          formId: "YOUR_HUBSPOT_FORM_ID", // Replace with your HubSpot form ID
-          target: "#hubspot-form-container",
-        })
-      }
-    }
-
-    return () => {
-      // Clean up script when component unmounts
-      document.body.removeChild(script)
-    }
-  }, [])
-
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
@@ -131,10 +86,46 @@ export default function ContactPage() {
                   <CardDescription>Fill out the form below and our team will get back to you shortly.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {/* HubSpot Form Container */}
-                  <div id="hubspot-form-container" ref={hubspotFormRef} className="min-h-[400px]">
-                    <p className="text-muted-foreground text-center py-8">Loading contact form...</p>
-                  </div>
+                  <form className="grid gap-4">
+                    <div className="grid gap-2">
+                      <label htmlFor="name" className="text-sm font-medium">
+                        Name
+                      </label>
+                      <input
+                        id="name"
+                        type="text"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Your name"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <label htmlFor="email" className="text-sm font-medium">
+                        Email
+                      </label>
+                      <input
+                        id="email"
+                        type="email"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        placeholder="Your email"
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <label htmlFor="message" className="text-sm font-medium">
+                        Message
+                      </label>
+                      <textarea
+                        id="message"
+                        className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[150px]"
+                        placeholder="Your message"
+                      />
+                    </div>
+                    <button
+                      type="submit"
+                      className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+                    >
+                      Send Message
+                    </button>
+                  </form>
                 </CardContent>
               </Card>
             </div>

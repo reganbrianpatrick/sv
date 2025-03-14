@@ -4,6 +4,8 @@ import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
 // Define the blog post type
 type BlogPostPreview = {
@@ -49,6 +51,7 @@ export default function BlogPage() {
 
   return (
     <>
+      <Header />
       <section className="w-full py-12 md:py-24 lg:py-32">
         <div className="container px-4 md:px-6">
           <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -89,6 +92,7 @@ export default function BlogPage() {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   )
 }

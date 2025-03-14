@@ -44,6 +44,8 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* Rest of the home page content */}
+        {/* About section */}
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted" id="about">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
@@ -146,6 +148,7 @@ export default function Home() {
             </div>
           </div>
         </section>
+        {/* Contact section */}
         <section className="w-full py-12 md:py-24 lg:py-32">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
@@ -157,7 +160,7 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex flex-col gap-2 min-[400px]:flex-row">
-                  <Link href="mailto:info@serviceventures.com">
+                  <Link href="/contact">
                     <Button>
                       Contact Us
                       <ArrowRight className="ml-2 h-4 w-4" />
