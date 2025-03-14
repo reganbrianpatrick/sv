@@ -13,22 +13,25 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  // Disable source maps
-  productionBrowserSourceMaps: false,
   // Use trailing slash for consistency
   trailingSlash: true,
   // Disable strict mode
   reactStrictMode: false,
   // Use SWC minify
   swcMinify: true,
-  // Set base path for GitHub Pages (if deploying to a subfolder)
-  // basePath: '/service-ventures', // Uncomment and adjust if needed
-  // Disable asset prefix for now
-  assetPrefix: "./",
   // Explicitly set the build directory
   distDir: "out",
-  // Disable webpack5 for simpler builds
-  webpack5: false,
+  // Remove webpack5 setting as it's not needed and can cause issues
+  // webpack5: false,
+
+  // IMPORTANT: Remove assetPrefix and basePath for now as they can cause issues
+  // assetPrefix: './',
+
+  // Disable experimental features
+  experimental: {
+    // Disable any experimental features
+    appDir: false,
+  },
 }
 
 module.exports = nextConfig
