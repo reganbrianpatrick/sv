@@ -1,3 +1,5 @@
+import createMDX from '@next/mdx';
+
 let userConfig = undefined
 try {
   userConfig = await import('./v0-user-next.config')
@@ -6,7 +8,7 @@ try {
 }
 
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+let nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -21,7 +23,18 @@ const nextConfig = {
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
 }
+
+const withMDX = createMDX({
+  // Add markdown plugins here, as desired
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+});
+
+nextConfig = withMDX(nextConfig);
 
 mergeConfig(nextConfig, userConfig)
 
@@ -46,3 +59,4 @@ function mergeConfig(nextConfig, userConfig) {
 }
 
 export default nextConfig
+
