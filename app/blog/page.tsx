@@ -1,144 +1,72 @@
-import fs from "fs"
-import path from "path"
-import Link from "next/link"
+import { getBlogPosts } from "@/lib/blog"
 import Image from "next/image"
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { formatDate } from "@/lib/utils"
-
-// Type for our blog metadata
-interface BlogPost {
-  slug: string
-  title: string
-  date: string
-  excerpt: string
-  author?: string
-  authorImage?: string
-  coverImage?: string
-  readTime?: string
-  tags?: string[]
-}
-
-// Function to get all blog posts
-function getBlogPosts(): BlogPost[] {
-  const postsDirectory = path.join(process.cwd(), "content/blog")
-  const filenames = fs.readdirSync(postsDirectory)
-
-  const posts = filenames
-    .filter((filename) => filename.endsWith(".mdx"))
-    .map((filename) => {
-      // Remove the .mdx extension to get the slug
-      const slug = filename.replace(/\.mdx$/, "")
-
-      // Read the MDX file content
-      const fullPath = path.join(postsDirectory, filename)
-      const fileContents = fs.readFileSync(fullPath, "utf8")
-
-      // Extract metadata from frontmatter
-      const metadata = extractMetadata(fileContents)
-
-      return {
-        slug,
-        title: metadata.title || slug,
-        date: metadata.date || new Date().toISOString(),
-        excerpt: metadata.excerpt || "",
-        author: metadata.author || "Service Ventures Team",
-        authorImage: metadata.authorImage || "/placeholder.svg?height=40&width=40",
-        coverImage: metadata.coverImage || "/placeholder.svg?height=400&width=600",
-        readTime: metadata.readTime || "5 min read",
-        tags: metadata.tags ? metadata.tags.split(",").map((tag: string) => tag.trim()) : [],
-      }
-    })
-    // Sort posts by date (newest first)
-    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-
-  return posts
-}
-
-// Simple function to extract metadata from frontmatter
-function extractMetadata(content: string) {
-  const metadataRegex = /---\s*([\s\S]*?)\s*---/
-  const match = metadataRegex.exec(content)
-
-  if (!match) return {}
-
-  const frontmatter = match[1]
-  const metadata: Record<string, string> = {}
-
-  frontmatter.split("\n").forEach((line) => {
-    const [key, ...valueParts] = line.split(":")
-    if (key && valueParts.length) {
-      metadata[key.trim()] = valueParts.join(":").trim()
-    }
-  })
-
-  return metadata
-}
+import Link from "next/link"
+import { ArrowUpRight } from "lucide-react"
 
 export default function BlogPage() {
   const posts = getBlogPosts()
 
   return (
-    <>
-      {/* Note: Your standard navigation bar is already included via the layout.tsx file */}
-      <div className="container mx-auto py-12">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">Service Ventures Blog</h1>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Insights, strategies, and success stories to help service-based businesses thrive.
+    <div className="container py-12 md:py-16 lg:py-24">
+      <div className="flex flex-col items-start gap-4 md:gap-8">
+        <div className="space-y-3">
+          <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">Blog</h1>
+          <p className="max-w-[700px] text-gray-500 md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed dark:text-gray-400">
+            Thoughts, ideas, and insights on technology, design, and development.
           </p>
         </div>
 
-        {/* All posts in grid layout */}
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid w-full grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
           {posts.map((post) => (
-            <Link href={`/blog/${post.slug}`} key={post.slug} className="group">
-              <Card className="h-full overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg">
-                <div className="relative h-48 w-full overflow-hidden">
-                  <Image
-                    src={post.coverImage || "/placeholder.svg"}
-                    alt={post.title}
-                    fill
-                    className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
+            <Link
+              key={post.slug}
+              href={`/blog/${post.slug}`}
+              className="group relative overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-all hover:shadow-md dark:border-gray-800 dark:bg-gray-950"
+            >
+              <div className="aspect-[16/9] overflow-hidden">
+                <Image
+                  src={post.coverImage || "/placeholder.svg?height=400&width=600"}
+                  alt={post.title}
+                  width={600}
+                  height={400}
+                  className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                />
+              </div>
+              <div className="p-6">
+                <div className="flex items-center justify-between">
+                  <div className="font-semibold">{post.title}</div>
+                  <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </div>
-                <CardHeader className="pb-2">
-                  <div className="flex items-center mb-2">
-                    <div className="h-8 w-8 rounded-full overflow-hidden mr-2">
-                      <Image
-                        src={post.authorImage || "/placeholder.svg"}
-                        alt={post.author}
-                        width={32}
-                        height={32}
-                        className="object-cover"
-                      />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium">{post.author}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatDate(post.date)} · {post.readTime}
-                      </p>
-                    </div>
-                  </div>
-                  <CardTitle className="group-hover:text-primary transition-colors">{post.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground line-clamp-3">{post.excerpt}</p>
-                </CardContent>
-                <CardFooter>
-                  <div className="flex flex-wrap gap-2">
-                    {post.tags.slice(0, 3).map((tag) => (
-                      <span key={tag} className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
+                <div className="mt-2 line-clamp-2 text-sm text-gray-500 dark:text-gray-400">{post.excerpt}</div>
+                <div className="mt-4 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
+                  <time dateTime={post.date}>
+                    {new Date(post.date).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </time>
+                  <span>•</span>
+                  <span>{post.readingTime}</span>
+                </div>
+                {post.tags && post.tags.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {post.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-100"
+                      >
                         {tag}
                       </span>
                     ))}
                   </div>
-                </CardFooter>
-              </Card>
+                )}
+              </div>
             </Link>
           ))}
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

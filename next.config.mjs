@@ -1,4 +1,4 @@
-import createMDX from '@next/mdx';
+import createMDX from '@next/mdx'
 
 let userConfig = undefined
 try {
@@ -8,7 +8,8 @@ try {
 }
 
 /** @type {import('next').NextConfig} */
-let nextConfig = {
+const nextConfig = {
+  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -17,24 +18,14 @@ let nextConfig = {
   },
   images: {
     unoptimized: true,
+    domains: ['images.unsplash.com'],
   },
   experimental: {
     webpackBuildWorker: true,
     parallelServerBuildTraces: true,
     parallelServerCompiles: true,
   },
-  pageExtensions: ['js', 'jsx', 'mdx', 'ts', 'tsx'],
 }
-
-const withMDX = createMDX({
-  // Add markdown plugins here, as desired
-  options: {
-    remarkPlugins: [],
-    rehypePlugins: [],
-  },
-});
-
-nextConfig = withMDX(nextConfig);
 
 mergeConfig(nextConfig, userConfig)
 
@@ -58,5 +49,14 @@ function mergeConfig(nextConfig, userConfig) {
   }
 }
 
-export default nextConfig
+const withMDX = createMDX({
+  // Add markdown plugins here, as desired
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+  },
+})
+
+// Merge MDX config with Next.js config
+export default withMDX(nextConfig)
 

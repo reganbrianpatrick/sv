@@ -1,151 +1,107 @@
 import fs from "fs"
 import path from "path"
 import { notFound } from "next/navigation"
+import { getBlogPostBySlug } from "@/lib/blog"
 import Image from "next/image"
 import Link from "next/link"
+import { ArrowLeft, Calendar, Clock } from "lucide-react"
+
+// Import the MDX components
 import { MDXRemote } from "next-mdx-remote/rsc"
-import { formatDate } from "@/lib/utils"
-import { ArrowLeft, Clock, Calendar, User } from "lucide-react"
 
-// Function to get a specific blog post by slug
-async function getBlogPost(slug: string) {
-  const fullPath = path.join(process.cwd(), "content/blog", `${slug}.mdx`)
-
-  try {
-    const fileContents = fs.readFileSync(fullPath, "utf8")
-    const metadata = extractMetadata(fileContents)
-
-    return {
-      slug,
-      content: fileContents,
-      title: metadata.title || slug,
-      date: metadata.date || new Date().toISOString(),
-      excerpt: metadata.excerpt || "",
-      author: metadata.author || "Service Ventures Team",
-      authorImage: metadata.authorImage || "/placeholder.svg?height=80&width=80",
-      coverImage: metadata.coverImage || "/placeholder.svg?height=600&width=1200",
-      readTime: metadata.readTime || "5 min read",
-      tags: metadata.tags ? metadata.tags.split(",").map((tag: string) => tag.trim()) : [],
-    }
-  } catch (error) {
-    return null
-  }
-}
-
-// Simple function to extract metadata from frontmatter
-function extractMetadata(content: string) {
-  const metadataRegex = /---\s*([\s\S]*?)\s*---/
-  const match = metadataRegex.exec(content)
-
-  if (!match) return {}
-
-  const frontmatter = match[1]
-  const metadata: Record<string, string> = {}
-
-  frontmatter.split("\n").forEach((line) => {
-    const [key, ...valueParts] = line.split(":")
-    if (key && valueParts.length) {
-      metadata[key.trim()] = valueParts.join(":").trim()
-    }
-  })
-
-  return metadata
-}
-
-// Function to get all blog post slugs for static generation
 export async function generateStaticParams() {
-  const postsDirectory = path.join(process.cwd(), "content/blog")
-  const filenames = fs.readdirSync(postsDirectory)
+  const blogDirectory = path.join(process.cwd(), "content/blog")
 
-  return filenames
-    .filter((filename) => filename.endsWith(".mdx"))
-    .map((filename) => ({
-      slug: filename.replace(/\.mdx$/, ""),
-    }))
+  if (!fs.existsSync(blogDirectory)) {
+    return []
+  }
+
+  const fileNames = fs.readdirSync(blogDirectory).filter((fileName) => fileName.endsWith(".mdx"))
+
+  return fileNames.map((fileName) => ({
+    slug: fileName.replace(/\.mdx$/, ""),
+  }))
 }
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await getBlogPost(params.slug)
+  const post = getBlogPostBySlug(params.slug)
 
   if (!post) {
     notFound()
   }
 
-  // Remove frontmatter from content
-  const contentWithoutFrontmatter = post.content.replace(/---\s*[\s\S]*?\s*---/, "")
+  // Read the MDX file content
+  const blogDirectory = path.join(process.cwd(), "content/blog")
+  const fullPath = path.join(blogDirectory, `${params.slug}.mdx`)
+  const fileContents = fs.readFileSync(fullPath, "utf8")
+
+  // Remove the frontmatter to get just the content
+  const content = fileContents.replace(/---[\s\S]*?---/, "")
 
   return (
-    <>
-      {/* Note: The standard navigation bar should be included via the layout.tsx file */}
-      <div className="container mx-auto py-12">
-        <div className="max-w-4xl mx-auto">
-          <Link
-            href="/blog"
-            className="flex items-center text-muted-foreground hover:text-foreground mb-8 transition-colors"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to all posts
-          </Link>
+    <div className="container py-12 md:py-16 lg:py-24">
+      <article className="mx-auto max-w-3xl">
+        <Link
+          href="/blog"
+          className="mb-8 inline-flex items-center gap-2 text-sm font-medium text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Blog
+        </Link>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">{post.title}</h1>
-
-          <div className="flex flex-wrap items-center gap-4 mb-8 text-muted-foreground">
-            <div className="flex items-center">
-              <User className="mr-2 h-4 w-4" />
-              <span>{post.author}</span>
-            </div>
-            <div className="flex items-center">
-              <Calendar className="mr-2 h-4 w-4" />
-              <span>{formatDate(post.date)}</span>
-            </div>
-            <div className="flex items-center">
-              <Clock className="mr-2 h-4 w-4" />
-              <span>{post.readTime}</span>
-            </div>
-          </div>
-
-          <div className="relative h-[400px] w-full mb-8 rounded-lg overflow-hidden">
-            <Image
-              src={post.coverImage || "/placeholder.svg"}
-              alt={post.title}
-              fill
-              className="object-cover"
-              priority
-            />
-          </div>
-
-          <div className="flex flex-wrap gap-2 mb-8">
-            {post.tags.map((tag) => (
-              <span key={tag} className="bg-secondary text-secondary-foreground px-3 py-1 rounded-full text-sm">
-                {tag}
-              </span>
-            ))}
-          </div>
-
-          <div className="prose prose-lg max-w-none">
-            <MDXRemote source={contentWithoutFrontmatter} />
-          </div>
-
-          <div className="mt-12 pt-8 border-t">
-            <div className="flex items-center">
-              <div className="h-16 w-16 rounded-full overflow-hidden mr-4">
-                <Image
-                  src={post.authorImage || "/placeholder.svg"}
-                  alt={post.author}
-                  width={64}
-                  height={64}
-                  className="object-cover"
-                />
+        <div className="space-y-8">
+          <div className="space-y-4">
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">{post.title}</h1>
+            <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                <time dateTime={post.date}>
+                  {new Date(post.date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </time>
               </div>
-              <div>
-                <h3 className="text-lg font-semibold">Written by {post.author}</h3>
-                <p className="text-muted-foreground">Service Ventures contributor</p>
+              <div className="flex items-center gap-1">
+                <Clock className="h-4 w-4" />
+                <span>{post.readingTime}</span>
               </div>
             </div>
           </div>
+
+          {post.coverImage && (
+            <div className="overflow-hidden rounded-lg">
+              <Image
+                src={post.coverImage || "/placeholder.svg"}
+                alt={post.title}
+                width={1200}
+                height={675}
+                className="w-full object-cover"
+              />
+            </div>
+          )}
+
+          <div className="prose prose-gray max-w-none dark:prose-invert">
+            <MDXRemote source={content} />
+          </div>
+
+          {post.tags && post.tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 pt-6 border-t border-gray-200 dark:border-gray-800">
+              <span className="text-sm font-medium text-gray-500 dark:text-gray-400">Tags:</span>
+              {post.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-sm font-medium text-gray-800 dark:bg-gray-800 dark:text-gray-100"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
         </div>
-      </div>
-    </>
+      </article>
+    </div>
   )
 }
 
