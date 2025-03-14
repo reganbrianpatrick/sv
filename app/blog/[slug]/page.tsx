@@ -120,7 +120,12 @@ export function generateStaticParams() {
   return Object.keys(blogPosts).map((slug) => ({ slug }))
 }
 
-export function generateMetadata({ params }: { params: { slug: string } }) {
+type Props = {
+  params: { slug: string }
+  searchParams?: { [key: string]: string | string[] | undefined }
+}
+
+export function generateMetadata({ params }: Props) {
   // Type-safe check if the slug exists in our blog posts
   const post = params.slug in blogPosts ? blogPosts[params.slug] : null
 
@@ -136,7 +141,8 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
   }
 }
 
-export default function BlogPostPage({ params }: { params: { slug: string } }) {
+// Fix the page props type to match Next.js expectations
+export default function BlogPostPage({ params }: Props) {
   // Type-safe check if the slug exists in our blog posts
   const post = params.slug in blogPosts ? blogPosts[params.slug] : null
 
