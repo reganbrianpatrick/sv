@@ -4,8 +4,6 @@ import { ArrowRight } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Header } from "@/components/header"
-import { Footer } from "@/components/footer"
 
 // Sample blog posts for static rendering
 const sampleBlogPosts = [
@@ -40,52 +38,48 @@ export default function BlogPage() {
   const blogPosts = sampleBlogPosts
 
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">Service Ventures Blog</h1>
-                <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Insights, trends, and perspectives from the Service Ventures team.
-                </p>
-              </div>
-            </div>
-            <div className="mx-auto grid max-w-7xl items-start gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
-              {blogPosts.map((post, index) => (
-                <BlogCard key={index} post={post} />
-              ))}
+    <>
+      <section className="w-full py-12 md:py-24 lg:py-32">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-2">
+              <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl">Service Ventures Blog</h1>
+              <p className="max-w-[700px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                Insights, trends, and perspectives from the Service Ventures team.
+              </p>
             </div>
           </div>
-        </section>
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-          <div className="container px-4 md:px-6">
-            <div className="flex flex-col items-center justify-center space-y-4 text-center">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Subscribe to Our Newsletter</h2>
-                <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Get the latest insights and updates from Service Ventures delivered to your inbox.
-                </p>
-              </div>
-              <div className="w-full max-w-sm space-y-2">
-                <form className="flex flex-col gap-2 sm:flex-row">
-                  <input
-                    type="email"
-                    placeholder="Enter your email"
-                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                  />
-                  <Button type="submit">Subscribe</Button>
-                </form>
-                <p className="text-xs text-muted-foreground">We respect your privacy. Unsubscribe at any time.</p>
-              </div>
+          <div className="mx-auto grid max-w-7xl items-start gap-8 py-12 md:grid-cols-2 lg:grid-cols-3">
+            {blogPosts.map((post, index) => (
+              <BlogCard key={index} post={post} />
+            ))}
+          </div>
+        </div>
+      </section>
+      <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <div className="container px-4 md:px-6">
+          <div className="flex flex-col items-center justify-center space-y-4 text-center">
+            <div className="space-y-2">
+              <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl">Subscribe to Our Newsletter</h2>
+              <p className="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+                Get the latest insights and updates from Service Ventures delivered to your inbox.
+              </p>
+            </div>
+            <div className="w-full max-w-sm space-y-2">
+              <form className="flex flex-col gap-2 sm:flex-row">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                />
+                <Button type="submit">Subscribe</Button>
+              </form>
+              <p className="text-xs text-muted-foreground">We respect your privacy. Unsubscribe at any time.</p>
             </div>
           </div>
-        </section>
-      </main>
-      <Footer />
-    </div>
+        </div>
+      </section>
+    </>
   )
 }
 

@@ -1,12 +1,18 @@
-import type { ReactNode } from "react"
+import type React from "react"
+import { Header } from "@/components/header"
+import { Footer } from "@/components/footer"
 
-export default function BlogLayout({ children }: { children: ReactNode }) {
+export default function BlogLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <>
-      {/* This layout inherits the main layout with the navigation bar */}
-      {/* You can add blog-specific layout elements here if needed */}
-      {children}
-    </>
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">{children}</main>
+      <Footer />
+    </div>
   )
 }
 
