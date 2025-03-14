@@ -78,105 +78,67 @@ export default function BlogPage() {
   const posts = getBlogPosts()
 
   return (
-    <div className="container mx-auto py-12">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Service Ventures Blog</h1>
-        <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-          Insights, strategies, and success stories to help service-based businesses thrive.
-        </p>
-      </div>
-
-      {/* Featured Post */}
-      {posts.length > 0 && (
-        <div className="mb-16">
-          <Link href={`/blog/${posts[0].slug}`}>
-            <div className="group relative overflow-hidden rounded-lg">
-              <div className="relative h-[400px] w-full">
-                <Image
-                  src={posts[0].coverImage || "/placeholder.svg"}
-                  alt={posts[0].title}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                  priority
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-              </div>
-              <div className="absolute bottom-0 left-0 p-6 text-white">
-                <div className="flex items-center mb-2">
-                  <div className="h-10 w-10 rounded-full overflow-hidden mr-3">
-                    <Image
-                      src={posts[0].authorImage || "/placeholder.svg"}
-                      alt={posts[0].author}
-                      width={40}
-                      height={40}
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">{posts[0].author}</p>
-                    <p className="text-xs opacity-80">
-                      {formatDate(posts[0].date)} · {posts[0].readTime}
-                    </p>
-                  </div>
-                </div>
-                <h2 className="text-3xl font-bold mb-2 group-hover:underline">{posts[0].title}</h2>
-                <p className="text-sm md:text-base opacity-90 max-w-3xl">{posts[0].excerpt}</p>
-              </div>
-            </div>
-          </Link>
+    <>
+      {/* Note: Your standard navigation bar is already included via the layout.tsx file */}
+      <div className="container mx-auto py-12">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold mb-4">Service Ventures Blog</h1>
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Insights, strategies, and success stories to help service-based businesses thrive.
+          </p>
         </div>
-      )}
 
-      {/* Rest of the posts */}
-      <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {posts.slice(1).map((post) => (
-          <Link href={`/blog/${post.slug}`} key={post.slug} className="group">
-            <Card className="h-full overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg">
-              <div className="relative h-48 w-full overflow-hidden">
-                <Image
-                  src={post.coverImage || "/placeholder.svg"}
-                  alt={post.title}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              </div>
-              <CardHeader className="pb-2">
-                <div className="flex items-center mb-2">
-                  <div className="h-8 w-8 rounded-full overflow-hidden mr-2">
-                    <Image
-                      src={post.authorImage || "/placeholder.svg"}
-                      alt={post.author}
-                      width={32}
-                      height={32}
-                      className="object-cover"
-                    />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium">{post.author}</p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatDate(post.date)} · {post.readTime}
-                    </p>
-                  </div>
+        {/* All posts in grid layout */}
+        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          {posts.map((post) => (
+            <Link href={`/blog/${post.slug}`} key={post.slug} className="group">
+              <Card className="h-full overflow-hidden border-0 shadow-md transition-all duration-300 hover:shadow-lg">
+                <div className="relative h-48 w-full overflow-hidden">
+                  <Image
+                    src={post.coverImage || "/placeholder.svg"}
+                    alt={post.title}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
-                <CardTitle className="group-hover:text-primary transition-colors">{post.title}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground line-clamp-3">{post.excerpt}</p>
-              </CardContent>
-              <CardFooter>
-                <div className="flex flex-wrap gap-2">
-                  {post.tags.slice(0, 3).map((tag) => (
-                    <span key={tag} className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </CardFooter>
-            </Card>
-          </Link>
-        ))}
+                <CardHeader className="pb-2">
+                  <div className="flex items-center mb-2">
+                    <div className="h-8 w-8 rounded-full overflow-hidden mr-2">
+                      <Image
+                        src={post.authorImage || "/placeholder.svg"}
+                        alt={post.author}
+                        width={32}
+                        height={32}
+                        className="object-cover"
+                      />
+                    </div>
+                    <div>
+                      <p className="text-sm font-medium">{post.author}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatDate(post.date)} · {post.readTime}
+                      </p>
+                    </div>
+                  </div>
+                  <CardTitle className="group-hover:text-primary transition-colors">{post.title}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-muted-foreground line-clamp-3">{post.excerpt}</p>
+                </CardContent>
+                <CardFooter>
+                  <div className="flex flex-wrap gap-2">
+                    {post.tags.slice(0, 3).map((tag) => (
+                      <span key={tag} className="bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full">
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </CardFooter>
+              </Card>
+            </Link>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
