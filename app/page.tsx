@@ -127,7 +127,7 @@ export default function Home() {
               <div className="space-y-2">
                 <h2 className="text-3xl font-bold tracking-tighter sm:text-5xl">Latest from Our Blog</h2>
                 <p className="max-w-[900px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
-                  Insights, trends, and perspectives from the Service Ventures team. Brian's Edit.
+                  Insights, trends, and perspectives from the Service Ventures team.
                 </p>
               </div>
             </div>

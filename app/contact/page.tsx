@@ -7,6 +7,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 
+// Add HubSpot types
+declare global {
+  interface Window {
+    hbspt?: {
+      forms: {
+        create: (config: {
+          region: string
+          portalId: string
+          formId: string
+          target: string
+        }) => void
+      }
+    }
+  }
+}
+
 export default function ContactPage() {
   const hubspotFormRef = useRef<HTMLDivElement>(null)
 
@@ -21,7 +37,6 @@ export default function ContactPage() {
 
     script.onload = () => {
       if (window.hbspt && hubspotFormRef.current) {
-        // @ts-ignore - HubSpot is loaded via script
         window.hbspt.forms.create({
           region: "na1",
           portalId: "YOUR_HUBSPOT_PORTAL_ID", // Replace with your HubSpot portal ID
