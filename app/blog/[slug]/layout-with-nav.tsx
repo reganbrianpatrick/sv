@@ -1,12 +1,12 @@
 import type { ReactNode } from "react"
-import Navigation from "@/components/navigation" // Update this path to match your actual navigation component
+import { Navigation } from "@/components/navigation" // Fixed import to use named export
 
 export default function BlogPostLayout({ children }: { children: ReactNode }) {
   return (
-    <>
+    <div className="flex min-h-screen flex-col">
       <Navigation />
-      {children}
-    </>
+      <main className="flex-1">{children}</main>
+    </div>
   )
 }
 
