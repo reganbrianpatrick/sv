@@ -5,8 +5,18 @@ import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
+// Define the blog post type
+type BlogPostPreview = {
+  slug: string
+  title: string
+  date: string
+  author: string
+  excerpt: string
+  image: string
+}
+
 // Sample blog posts for static rendering
-const sampleBlogPosts = [
+const sampleBlogPosts: BlogPostPreview[] = [
   {
     slug: "future-of-service-innovation",
     title: "The Future of Service Innovation",
@@ -84,7 +94,7 @@ export default function BlogPage() {
 }
 
 // Blog Card Component
-function BlogCard({ post }: { post: any }) {
+function BlogCard({ post }: { post: BlogPostPreview }) {
   return (
     <Card className="overflow-hidden">
       <Image

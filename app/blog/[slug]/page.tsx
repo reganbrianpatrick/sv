@@ -4,8 +4,22 @@ import Link from "next/link"
 import { ArrowLeft, Calendar, User } from "lucide-react"
 import Image from "next/image"
 
+// Define the blog post type
+type BlogPost = {
+  slug: string
+  title: string
+  date: string
+  author: string
+  excerpt: string
+  image: string
+  content: string
+}
+
+// Define the blog posts record type
+type BlogPostsRecord = Record<string, BlogPost>
+
 // Sample blog posts data for static rendering
-const blogPosts = {
+const blogPosts: BlogPostsRecord = {
   "future-of-service-innovation": {
     slug: "future-of-service-innovation",
     title: "The Future of Service Innovation",
@@ -107,7 +121,8 @@ export function generateStaticParams() {
 }
 
 export function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = blogPosts[params.slug]
+  // Type-safe check if the slug exists in our blog posts
+  const post = params.slug in blogPosts ? blogPosts[params.slug] : null
 
   if (!post) {
     return {
@@ -122,7 +137,8 @@ export function generateMetadata({ params }: { params: { slug: string } }) {
 }
 
 export default function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = blogPosts[params.slug]
+  // Type-safe check if the slug exists in our blog posts
+  const post = params.slug in blogPosts ? blogPosts[params.slug] : null
 
   if (!post) {
     notFound()
