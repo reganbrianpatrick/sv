@@ -16,46 +16,65 @@ export type BlogPost = {
 }
 
 // Path to the blog posts directory
-const postsDirectory = path.join(process.cwd(), "content/blog")
+const postsDirectory = (() => {
+  try {
+    return path.join(process.cwd(), "content/blog")
+  } catch (error) {
+    console.error("Error resolving blog directory:", error)
+    return ""
+  }
+})()
 
 // Get all blog posts
 export function getAllPosts(): BlogPost[] {
-  // Ensure the directory exists
-  if (!fs.existsSync(postsDirectory)) {
-    console.warn("Blog posts directory does not exist:", postsDirectory)
+  // Ensure the directory exists and is accessible
+  try {
+    if (!fs.existsSync(postsDirectory)) {
+      console.warn("Blog posts directory does not exist:", postsDirectory)
+      return []
+    }
+
+    // Get all markdown files
+    const fileNames = fs.readdirSync(postsDirectory)
+    const mdFiles = fileNames.filter((fileName) => fileName.endsWith(".md") || fileName.endsWith(".mdx"))
+
+    // Get data from each file
+    const posts = mdFiles
+      .map((fileName) => {
+        try {
+          // Remove the file extension to get the slug
+          const slug = fileName.replace(/\.(md|mdx)$/, "")
+
+          // Read the markdown file
+          const fullPath = path.join(postsDirectory, fileName)
+          const fileContents = fs.readFileSync(fullPath, "utf8")
+
+          // Extract frontmatter and content
+          const { data, content } = matter(fileContents)
+
+          // Return the blog post data
+          return {
+            slug,
+            title: data.title || "Untitled",
+            date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
+            author: data.author || "Anonymous",
+            excerpt: data.excerpt || "",
+            image: data.image || "/placeholder.svg?height=600&width=1200",
+            content,
+          }
+        } catch (error) {
+          console.error(`Error processing file ${fileName}:`, error)
+          return null
+        }
+      })
+      .filter(Boolean) // Remove any null entries
+
+    // Sort posts by date (newest first)
+    return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  } catch (error) {
+    console.error("Error getting all posts:", error)
     return []
   }
-
-  // Get all markdown files
-  const fileNames = fs.readdirSync(postsDirectory)
-  const mdFiles = fileNames.filter((fileName) => fileName.endsWith(".md") || fileName.endsWith(".mdx"))
-
-  // Get data from each file
-  const posts = mdFiles.map((fileName) => {
-    // Remove the file extension to get the slug
-    const slug = fileName.replace(/\.(md|mdx)$/, "")
-
-    // Read the markdown file
-    const fullPath = path.join(postsDirectory, fileName)
-    const fileContents = fs.readFileSync(fullPath, "utf8")
-
-    // Extract frontmatter and content
-    const { data, content } = matter(fileContents)
-
-    // Return the blog post data
-    return {
-      slug,
-      title: data.title || "Untitled",
-      date: data.date ? new Date(data.date).toISOString() : new Date().toISOString(),
-      author: data.author || "Anonymous",
-      excerpt: data.excerpt || "",
-      image: data.image || "/placeholder.svg?height=600&width=1200",
-      content,
-    }
-  })
-
-  // Sort posts by date (newest first)
-  return posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
 // Get a specific blog post by slug

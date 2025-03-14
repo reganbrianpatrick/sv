@@ -6,10 +6,38 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
-import { getAllPosts } from "@/lib/blog"
+
+// Sample blog posts for static rendering
+const sampleBlogPosts = [
+  {
+    slug: "future-of-service-innovation",
+    title: "The Future of Service Innovation",
+    date: "2023-11-15T00:00:00.000Z",
+    author: "Sarah Johnson",
+    excerpt: "How technology is transforming service delivery across industries.",
+    image: "/placeholder.svg?height=600&width=1200",
+  },
+  {
+    slug: "fundraising-strategies-service-startups",
+    title: "Fundraising Strategies for Service Startups",
+    date: "2023-10-28T00:00:00.000Z",
+    author: "Michael Chen",
+    excerpt: "Key insights for service-oriented businesses seeking venture capital.",
+    image: "/placeholder.svg?height=600&width=1200",
+  },
+  {
+    slug: "building-sustainable-service-models",
+    title: "Building Sustainable Service Models",
+    date: "2023-10-12T00:00:00.000Z",
+    author: "David Rodriguez",
+    excerpt: "How to create service businesses that scale efficiently and sustainably.",
+    image: "/placeholder.svg?height=600&width=1200",
+  },
+]
 
 export default function BlogPage() {
-  const blogPosts = getAllPosts()
+  // Use sample blog posts instead of trying to read from filesystem
+  const blogPosts = sampleBlogPosts
 
   return (
     <div className="flex min-h-screen flex-col">
