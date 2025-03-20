@@ -1,23 +1,48 @@
+let userConfig = undefined
+try {
+  userConfig = await import('./v0-user-next.config')
+} catch (e) {
+  // ignore error
+}
+
+/** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Configure image domains
-  images: {
-    domains: ['placeholder.com'],
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+  eslint: {
+    ignoreDuringBuilds: true,
   },
-  // Disable TypeScript type checking during build for faster builds
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Disable ESLint during build for faster builds
-  eslint: {
-    ignoreDuringBuilds: true,
+  images: {
+    unoptimized: true,
+  },
+  experimental: {
+    webpackBuildWorker: true,
+    parallelServerBuildTraces: true,
+    parallelServerCompiles: true,
+  },
+}
+
+mergeConfig(nextConfig, userConfig)
+
+function mergeConfig(nextConfig, userConfig) {
+  if (!userConfig) {
+    return
+  }
+
+  for (const key in userConfig) {
+    if (
+      typeof nextConfig[key] === 'object' &&
+      !Array.isArray(nextConfig[key])
+    ) {
+      nextConfig[key] = {
+        ...nextConfig[key],
+        ...userConfig[key],
+      }
+    } else {
+      nextConfig[key] = userConfig[key]
+    }
   }
 }
 
-export default nextConfig;
-
+export default nextConfig
