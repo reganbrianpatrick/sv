@@ -35,7 +35,7 @@ export default function HomePage() {
                 </div>
               </div>
               <Image
-                src="/placeholder.svg?height=550&width=550"
+                src="/about.1.jpg"
                 width={550}
                 height={550}
                 alt="Hero Image"

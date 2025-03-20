@@ -47,11 +47,11 @@ type PortfolioCompany = {
 // Sample portfolio companies
 const portfolioCompanies: PortfolioCompany[] = [
   {
-    name: "CloudService",
+    name: "ModernFi CUSO",
     logo: "/placeholder.svg?height=80&width=80",
-    description: "Enterprise SaaS platform for service management and optimization.",
-    category: "SaaS",
-    website: "https://cloudservice.example.com",
+    description: "this is a placeholder description.",
+  //  category: "SaaS",
+    website: "https://modernfi.com/cuso",
   },
   {
     name: "FinanceFlow",
